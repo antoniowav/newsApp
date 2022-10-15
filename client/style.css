@@ -1,0 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@300&family=Silkscreen&display=swap");
+* {
+  font-family: silkscreen;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background: -moz-linear-gradient(
+    -45deg,
+    #183850 0,
+    #183850 25%,
+    #192c46 50%,
+    #22254c 75%,
+    #22254c 100%
+  );
+  background: -webkit-linear-gradient(
+    -45deg,
+    #183850 0,
+    #183850 25%,
+    #192c46 50%,
+    #22254c 75%,
+    #22254c 100%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  color: white;
+}
+
+.separator {
+  border-bottom: 2px solid white;
+}
