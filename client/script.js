@@ -2,13 +2,6 @@ window.addEventListener('load', () => {
   renderNews()
 })
 
-fetch("http://localhost:3000/news")
-.then((response) => {
-  return response.json()
-})
-.then((data) => {
-  console.log(data.articles); 
-})
 
 async function makeRequest(url, method, body) {
   try {
@@ -26,8 +19,21 @@ async function makeRequest(url, method, body) {
    }
 }
 
-function renderNews() {
+
+async function renderNews() {
 console.log('test');
+let url = 'http://localhost:3000/news'
+let result = await  fetch(url)
+.then((response) => {
+  return response.json()
+})
+.then((data) => {
+  console.log(data.articles); 
+  })
+const newsContainer = document.getElementById('newsContainer')
+const title = document.createElement('h1')
+title.innerText = result.articles[0].title
+newsContainer.append(title)
 
 }
 
