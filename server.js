@@ -28,9 +28,9 @@ app.get("/news/:data", async (req, res) => {
   var api =
     req.params.data == ""
       ? url + "language=en&" + "apiKey=" + key
-      : url + `q=${req.params.data}` + "language=en&" + "apiKey=" + key;
+      : url + `q=${req.params.data}&` + "language=en&" + "apiKey=" + key;
 
-  const response = await fetch(url);
+  const response = await fetch(api);
   const data = await response.json();
   res.json(data);
 });

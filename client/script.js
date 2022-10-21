@@ -1,7 +1,9 @@
-window.addEventListener('load', () => {
-  renderNews()
-})
-
+const loaderContainer = document.querySelector(".loader-container");
+const separator = document.getElementById("title-container");
+window.addEventListener("load", () => {
+  setTimeout(hideLoading, 1500);
+  setTimeout(renderNews, 1500);
+});
 
 async function makeRequest(url, method, body) {
   try {
@@ -14,75 +16,63 @@ async function makeRequest(url, method, body) {
     });
     let result = await response.json();
     return result;
-   } catch(err) {
+  } catch (err) {
     console.error(err);
-   }
+  }
 }
 
+const hideLoading = () => {
+  loaderContainer.style.display = "none";
+};
 
 async function renderNews() {
-console.log('test');
-let url = 'http://localhost:3000/news'
-let result = await  fetch(url)
-.then((response) => {
-  return response.json()
-})
-.then((data) => {
-  console.log(data.articles); 
-  })
-const newsContainer = document.getElementById('newsContainer')
-const title = document.createElement('h1')
-title.innerText = result.articles[0].title
-newsContainer.append(title)
-
+  separator.style.display = "block";
+  let url = `http://localhost:3000/news`;
+  let method = "GET";
+  let result = await makeRequest(url, method);
+  const news = result.articles;
+  console.log(news);
+  news.forEach((singleNews) => {
+    const newsContainer = document.getElementById("newsContainer");
+    //create news container
+    const singleNewsContainer = document.createElement("div");
+    singleNewsContainer.classList.add("single-news");
+    //create title with a tag and href
+    const title = document.createElement("h1");
+    const linkToNews = document.createElement("a");
+    linkToNews.href = singleNews.url;
+    linkToNews.setAttribute("target", "_blank");
+    linkToNews.innerHTML = singleNews.title;
+    //append a tag to h1 title
+    title.append(linkToNews);
+    //create image container
+    const imgContainer = document.createElement("div");
+    imgContainer.classList.add("image-container");
+    //create img tag
+    const newsImage = document.createElement("img");
+    newsImage.src = singleNews.urlToImage;
+    //append img to his container
+    imgContainer.append(newsImage);
+    //append to containers
+    singleNewsContainer.append(title, imgContainer);
+    newsContainer.append(singleNewsContainer);
+  });
 }
+//create search fnction for news
 
-//create search fnction for news 
+//get the text from input field
 
-/* const searchStringGenerator = (rawString) => {
-  let stringArray = rawString.split(" ");
-  
-  let searchText = rawString.substring(rawString.indexOf(" ") + 1);
-  
-  if (stringArray.length == 1 || !searchText.length) {
-    searchText = "";
-  }
-  return searchText;
-  };
+let inputText;
 
-  async function showGifs(searchText) {
-
-    if (msgInput.value === '/') {
-    msgInput.value = '/stickers'
-    searchText = ''
-    }
-  
-    
-    msgInput.focus()
-    optionsDiv.style.flexDirection = "row";
-    optionsDiv.style.overflowX = "scroll";
-    optionsDiv.style.overflowY = "hidden";
-    optionsDiv.style.justifyContent = "unset";
-  
-    let url = `http://localhost:3000/gifs/${searchText}`;
+const node = document.getElementsByClassName("search-input")[0];
+node.addEventListener("keyup", async function (event) {
+  if (event.key === "Enter") {
+    inputText = node.value;
+    console.log(inputText);
+    let url = `http://localhost:3000/news/${inputText}`;
     let method = "GET";
     let result = await makeRequest(url, method, undefined);
-  
-    optionsDiv.innerHTML = "";
-    result.data.forEach((gif) => {
-      let gifDiv = document.createElement("div");
-      let gifImg = document.createElement("img");
-      gifImg.src = gif.images.downsized.url;
-      gifDiv.append(gifImg);
-      optionsDiv.append(gifDiv);
-  
-      gifImg.addEventListener("click", () => {
-        let img = true;
-        socket.emit("message", gif.images.downsized.url, img);
-      });
-    });
+    console.log(result);
+    return result;
   }
-
-
-
- */
+});
